@@ -1,4 +1,5 @@
 import json
+from flask import abort
 from typing import List, Dict
 from google.cloud import bigquery
 from google.cloud.bigquery.table import Row
@@ -28,10 +29,13 @@ def prepare_output(rows: Row) -> List[Dict]:
 
 
 def main(request):
-    bq_client = bigquery.Client()
-    response = query_bigquery(SQL_FILE, bq_client)
-    output_data = json.dumps(prepare_output(response))
-    return output_data
+    if request.method == 'GET':
+        bq_client = bigquery.Client()
+        response = query_bigquery(SQL_FILE, bq_client)
+        output_data = json.dumps(prepare_output(response))
+        return output_data
+    else:
+        return abort(405)
 
 
 if __name__ == '__main__':
