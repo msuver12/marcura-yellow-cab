@@ -38,7 +38,3 @@ def main(request):
         return abort(405)
 
 
-if __name__ == '__main__':
-    main({})
-
-
